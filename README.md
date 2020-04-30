@@ -15,13 +15,15 @@ session.New(config ...session.Config) *Session
 ### Config
 | Property | Type | Description | Default |
 | :--- | :--- | :--- | :--- |
-| Key | `string` | Defines a function to skip middleware | `"sessionid"` |
-| Lookup | `string` | Where to look for the session id, possible values: `cookie`, `header`, `query` | `"cookie"` |
+| Lookup | `string` | Where to look for the session id `<source>:<name>`, possible values: `cookie:key`, `header:key`, `query:key` | `"cookie:session_id"` |
 | Domain | `string` | Cookie domain | `""` |
-| Expires | `time.Duration` | Session expiry | `2 * time.Hour` |
-| Secure | `bool` | Custom response body for unauthorized responses | `false` |
+| Expiration | `time.Duration` | Session expiration time, possible values : `0` means no expiry (24 years), `-1` means when the browser closes, `>0` is the `time.Duration` which the session cookies should expire. | `12 * time.Hour` |
+| Secure | `bool` | If the cookie should only be send over HTTPS | `false` |
+| Provider | `Provider` | Holds the provider interface | `memory.Provider` |
+| Generator | `func() []byte` | Generator is a function that generates an unique id | `uuid` |
+| GCInterval | `time.Duration` | Interval for the garbage collector | `uuid` |
 
-### Example
+### Default Example
 ```go
 package main
 
@@ -34,21 +36,13 @@ import (
 
 func main() {
   app := fiber.New()
-  
-  // optional config
-  config := session.Config{
-    Key:    "dinosaurus",       // default: "sessionid"
-    Lookup: "header",           // default: "cookie"
-    Domain: "google.com",       // default: ""
-    Expires: 30 * time.Minutes, // default: 2 * time.Hour
-    Secure:  true,              // default: false
-  }
 
   // create session handler
-  sessions := session.New(config)
+  sessions := session.New()
 
   app.Get("/", func(c *fiber.Ctx) {
-    store := sessions.Start(c)   // get/create new session
+    store := sessions.Get(c)    // get/create new session
+    defer store.Save()
 
     store.ID()                   // returns session id
     store.Empty()                // empty storage
@@ -57,7 +51,80 @@ func main() {
     store.Regenerate()           // generate new session id
     store.Delete("john")         // delete from storage
     store.Set("john", "doe")     // save to storage
-    store.Expires(2 * time.Hour) // set session expiration
+  })
+  
+  app.Listen(3000)
+}
+```
+
+### Provider Example
+```go
+package main
+
+import (
+  "fmt"
+
+  "github.com/gofiber/fiber"
+  "github.com/gofiber/session"
+  "github.com/gofiber/session/provider/memcache"
+  // "github.com/gofiber/session/provider/mysql"
+  // "github.com/gofiber/session/provider/postgres"
+  // "github.com/gofiber/session/provider/redis"
+  // "github.com/gofiber/session/provider/sqlite3"
+)
+
+func main() {
+  app := fiber.New()
+
+  provider := memcache.New(memcache.Config{
+    KeyPrefix:  "session",
+    ServerList: []string{
+      "0.0.0.0:11211",
+    },
+    MaxIdleConns: 8,
+  })
+  // provider := mysql.New(mysql.Config{
+  //   Host:       "session",
+  //   Port:       3306,
+  //   Username:   "root",
+  //   Password:   "",
+  //   Database:   "test",
+  //   TableName:  "session",
+  // })
+  // provider := postgres.New(postgres.Config{
+  //   Host:       "session",
+  //   Port:       5432,
+  //   Username:   "root",
+  //   Password:   "",
+  //   Database:   "test",
+  //   TableName:  "session",
+  // })
+  // provider := redis.New(redis.Config{
+  //   KeyPrefix:   "session",
+  //   Addr:        "127.0.0.1:6379",
+  //   PoolSize:    8,
+  //   IdleTimeout: 30 * time.Second,
+  // })
+  // provider := sqlite3.New(sqlite3.Config{
+  //   DBPath:     "test.db",
+  //   TableName:  "session",
+  // })
+
+  sessions := session.New(session.Config{
+    Provider: provider,
+  })
+
+  app.Get("/", func(c *fiber.Ctx) {
+    store := sessions.Get(c)    // get/create new session
+    defer store.Save()
+
+    store.ID()                   // returns session id
+    store.Empty()                // empty storage
+    store.Destroy()              // delete storage + cookie
+    store.Get("john")            // get from storage
+    store.Regenerate()           // generate new session id
+    store.Delete("john")         // delete from storage
+    store.Set("john", "doe")     // save to storage
   })
   
   app.Listen(3000)
