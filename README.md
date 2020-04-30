@@ -1,6 +1,6 @@
 ### Session
 This session middleware is build on top of [fasthttp/session](https://github.com/fasthttp/session) by [@savsgio](https://github.com/savsgio) [MIT](https://github.com/fasthttp/session/blob/master/LICENSE).
-Special thanks to [@thomasvvugt] for helping with this middleware.
+Special thanks to [@thomasvvugt](https://github.com/thomasvvugt) for helping with this middleware.
 
 ### Install
 ```

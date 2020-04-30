@@ -1,3 +1,8 @@
+// 🚀 Fiber is an Express inspired web framework written in Go with 💖
+// 📌 API Documentation: https://docs.gofiber.io
+// 📝 Github Repository: https://github.com/gofiber/fiber
+// 🙏 Special thanks to @thomasvvugt & @savsgio (fasthttp/session)
+
 package sqlite3
 
 import (
@@ -17,7 +22,7 @@ type Config struct {
 }
 
 // New ...
-func New(conf ...Config) *sqlite3.Provider {
+func New(config ...Config) *sqlite3.Provider {
 	var cfg Config
 	if len(config) > 0 {
 		cfg = config[0]
