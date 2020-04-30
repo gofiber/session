@@ -46,7 +46,6 @@ func main() {
     defer store.Save()
 
     store.ID()                   // returns session id
-    store.Empty()                // empty storage
     store.Destroy()              // delete storage + cookie
     store.Get("john")            // get from storage
     store.Regenerate()           // generate new session id
@@ -120,7 +119,6 @@ func main() {
     defer store.Save()
 
     store.ID()                   // returns session id
-    store.Empty()                // empty storage
     store.Destroy()              // delete storage + cookie
     store.Get("john")            // get from storage
     store.Regenerate()           // generate new session id
