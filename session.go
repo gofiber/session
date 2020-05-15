@@ -54,6 +54,10 @@ type Config struct {
 	// gc life time to execute it
 	// Optional. 1 minute
 	GCInterval time.Duration
+
+	// fasthttp/session always sets a cookie response
+	// we want to disable this if no cookie lookup is set
+	noCookie bool
 }
 
 // Session ...
@@ -86,7 +90,7 @@ func New(config ...Config) *Session {
 	if cfg.Provider == nil {
 		provider, err := memory.New(memory.Config{})
 		if err != nil {
-			fmt.Errorf("session: memory %v", err)
+			log.Fatalf("session: memory %v", err)
 		}
 		cfg.Provider = provider
 	}
@@ -107,10 +111,15 @@ func New(config ...Config) *Session {
 	scfg.SessionNameInHTTPHeader = parts[1]
 	scfg.SessionIDInURLQuery = parts[0] == "query"
 	scfg.SessionNameInURLQuery = parts[1]
-
+	// fasthttp/session always sets a cookie response
+	// we want to disable this if no cookie lookup is set
+	if parts[0] != "cookie" {
+		cfg.noCookie = true
+	}
 	// Create fiber session
 	sessions := &Session{
-		core: fsession.New(scfg),
+		config: cfg,
+		core:   fsession.New(scfg),
 	}
 	provider := fmt.Sprintf("%v", reflect.TypeOf(cfg.Provider))
 	switch provider {

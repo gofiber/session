@@ -25,6 +25,9 @@ func (s *Store) ID() string {
 // Save storage before response
 func (s *Store) Save() {
 	s.sess.core.Save(s.ctx.Fasthttp, s.core)
+	if s.sess.config.noCookie {
+		s.ctx.Fasthttp.Response.Header.Del("Set-Cookie")
+	}
 }
 
 // Get get data by key

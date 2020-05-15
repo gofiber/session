@@ -1,7 +1,5 @@
 github.com/bradfitz/gomemcache v0.0.0-20190913173617-a41fca850d0b h1:L/QXpzIa3pOvUGt1D1lA5KjYhPBAN/3iWdP7xeFS9F0=
 github.com/bradfitz/gomemcache v0.0.0-20190913173617-a41fca850d0b/go.mod h1:H0wQNHz2YrLsuXOZozoeDmnHXkNCRmMW0gwFWDfEZDA=
-github.com/fasthttp/session/v2 v2.0.1 h1:9AcFjtRY7eFsuPxzzAJofvh1QxQabVWfxZHa1WndUFM=
-github.com/fasthttp/session/v2 v2.0.1/go.mod h1:u9Z1Tn1V9XLAZKHM6bjHFsinVC5/KEn2M1rllhcjFgc=
 github.com/fasthttp/session/v2 v2.0.2 h1:hoCr7xM+wXjkp0uwFna9G0k9ZUZNDUM5/SzgAlXqjvw=
 github.com/fasthttp/session/v2 v2.0.2/go.mod h1:u9Z1Tn1V9XLAZKHM6bjHFsinVC5/KEn2M1rllhcjFgc=
 github.com/fsnotify/fsnotify v1.4.7 h1:IXs+QLmnXW2CcXuY+8Mzv/fWEsPGWxqefPtCP5CnV9I=
@@ -10,8 +8,8 @@ github.com/go-redis/redis/v7 v7.2.0 h1:CrCexy/jYWZjW0AyVoHlcJUeZN19VWlbepTh1Vq6d
 github.com/go-redis/redis/v7 v7.2.0/go.mod h1:JDNMw23GTyLNC4GZu9njt15ctBQVn7xjRfnwdHj/Dcg=
 github.com/go-sql-driver/mysql v1.5.0 h1:ozyZYNQW3x3HtqT1jira07DN2PArx2v7/mN66gGcHOs=
 github.com/go-sql-driver/mysql v1.5.0/go.mod h1:DCzpHaOWr8IXmIStZouvnhqoel9Qv2LBy8hT2VhHyBg=
-github.com/gofiber/fiber v1.9.3 h1:KOuTZABkLAOQkPfrXhnIaPi7QsMkFClBKK6bLL2f4ZM=
-github.com/gofiber/fiber v1.9.3/go.mod h1:o2YQgwJW8+Z16x8MTos4nYn8PD1RJpzu9fojiGqjSjI=
+github.com/gofiber/fiber v1.9.6 h1:HtzOdbdNn/K/NlMMLbCNkiI79Ft0zjio7STcgY/Rox0=
+github.com/gofiber/fiber v1.9.6/go.mod h1:o2YQgwJW8+Z16x8MTos4nYn8PD1RJpzu9fojiGqjSjI=
 github.com/golang/protobuf v1.2.0/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/golang/protobuf v1.3.2 h1:6nsPYzhq5kReh6QImI3k5qWzO4PEbvbIW2cwSfR/6xs=
 github.com/golang/protobuf v1.3.2/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
