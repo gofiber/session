@@ -15,6 +15,7 @@ import (
 
 	fsession "github.com/fasthttp/session/v2"
 	"github.com/fasthttp/session/v2/providers/memory"
+	"github.com/valyala/fasthttp"
 
 	"github.com/google/uuid"
 
@@ -25,17 +26,22 @@ import (
 type Config struct {
 	// Lookup is a string in the form of "<source>:<name>" that is used
 	// to extract session id from the request.
-	// Possible values: "header:<name>", "query:<name>", "form:<name>", "param:<name>", "cookie:<name>"
+	// Possible values: "header:<name>", "query:<name>" or "cookie:<name>"
 	// Optional. Default value "cookie:session_id".
 	Lookup string
 
-	// Secure cookie
+	// Secure attribute for cookie
 	// Optional. Default: false
 	Secure bool
 
-	// Cookie domain
+	// Domain attribute for cookie
 	// Optional. Default: ""
 	Domain string
+
+	// SameSite attribute for cookie
+	// Possible values: "Lax", "Strict", "None"
+	// Optional. Default: "Lax"
+	SameSite string
 
 	//  0 means no expire, (24 years)
 	// -1 means when browser closes
@@ -106,6 +112,14 @@ func New(config ...Config) *Session {
 	scfg.Domain = cfg.Domain
 	scfg.Expiration = cfg.Expiration
 	scfg.Secure = cfg.Secure
+	switch strings.ToLower(cfg.SameSite) {
+	case "strict":
+		scfg.CookieSameSite = fasthttp.CookieSameSiteStrictMode
+	case "none":
+		scfg.CookieSameSite = fasthttp.CookieSameSiteNoneMode
+	default:
+		scfg.CookieSameSite = fasthttp.CookieSameSiteLaxMode
+	}
 	// Set configuration for header and query lookups
 	scfg.SessionIDInHTTPHeader = parts[0] == "header"
 	scfg.SessionNameInHTTPHeader = parts[1]
