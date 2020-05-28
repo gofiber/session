@@ -1,4 +1,11 @@
-### Session
+# Session
+
+![Release](https://img.shields.io/github/release/gofiber/session.svg)
+[![Discord](https://img.shields.io/badge/discord-join%20channel-7289DA)](https://gofiber.io/discord)
+![Test](https://github.com/gofiber/session/workflows/Test/badge.svg)
+![Security](https://github.com/gofiber/session/workflows/Security/badge.svg)
+![Linter](https://github.com/gofiber/session/workflows/Linter/badge.svg)
+
 This session middleware is build on top of [fasthttp/session](https://github.com/fasthttp/session) by [@savsgio](https://github.com/savsgio) [MIT](https://github.com/fasthttp/session/blob/master/LICENSE).
 Special thanks to [@thomasvvugt](https://github.com/thomasvvugt) for helping with this middleware.
 
