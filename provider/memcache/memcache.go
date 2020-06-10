@@ -6,10 +6,10 @@
 package memcache
 
 import (
-	"fmt"
 	"time"
 
 	memcache "github.com/fasthttp/session/v2/providers/memcache"
+	utils "github.com/gofiber/session/provider"
 )
 
 // Config memcache options
@@ -44,7 +44,7 @@ func New(config ...Config) *memcache.Provider {
 		MaxIdleConns: cfg.MaxIdleConns,
 	})
 	if err != nil {
-		fmt.Errorf("session: memcache %v", err)
+		utils.ErrorProvider("memcache", err)
 	}
 	return provider
 }

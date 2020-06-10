@@ -6,10 +6,10 @@
 package mysql
 
 import (
-	"fmt"
 	"time"
 
 	mysql "github.com/fasthttp/session/v2/providers/mysql"
+	utils "github.com/gofiber/session/provider"
 )
 
 // Config MySQL options
@@ -94,7 +94,7 @@ func New(config ...Config) *mysql.Provider {
 		ConnMaxLifetime: cfg.ConnMaxLifetime,
 	})
 	if err != nil {
-		fmt.Errorf("session: mysql %v", err)
+		utils.ErrorProvider("mysql", err)
 	}
 	return provider
 }

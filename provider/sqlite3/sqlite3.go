@@ -6,10 +6,10 @@
 package sqlite3
 
 import (
-	"fmt"
 	"time"
 
 	sqlite3 "github.com/fasthttp/session/v2/providers/sqlite3"
+	utils "github.com/gofiber/session/provider"
 )
 
 // Config redis options
@@ -50,7 +50,7 @@ func New(config ...Config) *sqlite3.Provider {
 		ConnMaxLifetime: cfg.ConnMaxLifetime,
 	})
 	if err != nil {
-		fmt.Errorf("session: sqlite3 %v", err)
+		utils.ErrorProvider("sqlite3", err)
 	}
 	return provider
 }

@@ -6,10 +6,10 @@
 package postgres
 
 import (
-	"fmt"
 	"time"
 
 	postgres "github.com/fasthttp/session/v2/providers/postgre"
+	utils "github.com/gofiber/session/provider"
 )
 
 // Config Postgres options
@@ -72,7 +72,7 @@ func New(config ...Config) *postgres.Provider {
 		ConnMaxLifetime: cfg.ConnMaxLifetime,
 	})
 	if err != nil {
-		fmt.Errorf("session: postgres %v", err)
+		utils.ErrorProvider("postgres", err)
 	}
 	return provider
 }
