@@ -7,10 +7,10 @@ package redis
 
 import (
 	"crypto/tls"
-	"fmt"
 	"time"
 
 	"github.com/fasthttp/session/v2/providers/redis"
+	utils "github.com/gofiber/session/provider"
 )
 
 // Config Redis options
@@ -77,7 +77,7 @@ func New(config ...Config) *redis.Provider {
 		// Limiter             cfg.Limiter,
 	})
 	if err != nil {
-		fmt.Errorf("session: redis %v", err)
+		utils.ErrorProvider("redis", err)
 	}
 	return provider
 }

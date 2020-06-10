@@ -23,11 +23,14 @@ func (s *Store) ID() string {
 }
 
 // Save storage before response
-func (s *Store) Save() {
-	s.sess.core.Save(s.ctx.Fasthttp, s.core)
+func (s *Store) Save() error {
+	if err := s.sess.core.Save(s.ctx.Fasthttp, s.core); err != nil {
+		return err
+	}
 	if s.sess.config.noCookie {
 		s.ctx.Fasthttp.Response.Header.Del("Set-Cookie")
 	}
+	return nil
 }
 
 // Get get data by key
@@ -47,11 +50,11 @@ func (s *Store) Delete(key string) {
 
 // Destroy session and cookies
 func (s *Store) Destroy() {
-	s.sess.core.Destroy(s.ctx.Fasthttp)
+	_ = s.sess.core.Destroy(s.ctx.Fasthttp)
 }
 
 // Regenerate session id
-func (s *Store) Regenerate() {
+func (s *Store) Regenerate() error {
 	// https://github.com/fasthttp/session/blob/master/session.go#L205
-	s.sess.core.Regenerate(s.ctx.Fasthttp)
+	return s.sess.core.Regenerate(s.ctx.Fasthttp)
 }
