@@ -50,7 +50,7 @@ func (s *Store) Delete(key string) {
 
 // Destroy session and cookies
 func (s *Store) Destroy() {
-	_ = s.sess.core.Destroy(s.ctx.Fasthttp)
+	s.core.Reset()
 }
 
 // Regenerate session id

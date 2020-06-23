@@ -15,11 +15,9 @@ import (
 
 	fsession "github.com/fasthttp/session/v2"
 	"github.com/fasthttp/session/v2/providers/memory"
-	"github.com/valyala/fasthttp"
-
-	"github.com/google/uuid"
-
 	"github.com/gofiber/fiber"
+	"github.com/gofiber/utils"
+	"github.com/valyala/fasthttp"
 )
 
 // Config defines the config for RequestID middleware
@@ -165,5 +163,5 @@ func (s *Session) Get(ctx *fiber.Ctx) *Store {
 }
 
 func defaultGenerator() []byte {
-	return []byte(uuid.New().String())
+	return utils.GetBytes(utils.UUID())
 }
