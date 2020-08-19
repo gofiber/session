@@ -8,8 +8,7 @@ package memcache
 import (
 	"time"
 
-	memcache "github.com/fasthttp/session/v2/providers/memcache"
-	utils "github.com/gofiber/session/provider"
+	"github.com/fasthttp/session/v2/providers/memcache"
 )
 
 // Config memcache options
@@ -21,7 +20,7 @@ type Config struct {
 }
 
 // New ...
-func New(config ...Config) *memcache.Provider {
+func New(config ...Config) (*memcache.Provider, error) {
 	var cfg Config
 	if len(config) > 0 {
 		cfg = config[0]
@@ -43,8 +42,9 @@ func New(config ...Config) *memcache.Provider {
 		Timeout:      cfg.Timeout,
 		MaxIdleConns: cfg.MaxIdleConns,
 	})
+
 	if err != nil {
-		utils.ErrorProvider("memcache", err)
+		return nil, err
 	}
-	return provider
+	return provider, nil
 }

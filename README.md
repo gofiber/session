@@ -45,7 +45,7 @@ import (
 func main() {
   app := fiber.New()
 
-  // create session handler
+  // create session handler, using the in-memory session store
   sessions := session.New()
 
   app.Get("/", func(c *fiber.Ctx) {
@@ -69,11 +69,10 @@ func main() {
 package main
 
 import (
-  "fmt"
-
   "github.com/gofiber/fiber"
   "github.com/gofiber/session"
   "github.com/gofiber/session/provider/memcache"
+  "log"
   // "github.com/gofiber/session/provider/mysql"
   // "github.com/gofiber/session/provider/postgres"
   // "github.com/gofiber/session/provider/redis"
@@ -83,14 +82,14 @@ import (
 func main() {
   app := fiber.New()
 
-  provider := memcache.New(memcache.Config{
+  provider, err := memcache.New(memcache.Config{
     KeyPrefix:  "session",
     ServerList: []string{
       "0.0.0.0:11211",
     },
     MaxIdleConns: 8,
   })
-  // provider := mysql.New(mysql.Config{
+  // provider, err := mysql.New(mysql.Config{
   //   Host:       "session",
   //   Port:       3306,
   //   Username:   "root",
@@ -98,7 +97,7 @@ func main() {
   //   Database:   "test",
   //   TableName:  "session",
   // })
-  // provider := postgres.New(postgres.Config{
+  // provider, err := postgres.New(postgres.Config{
   //   Host:       "session",
   //   Port:       5432,
   //   Username:   "root",
@@ -106,16 +105,20 @@ func main() {
   //   Database:   "test",
   //   TableName:  "session",
   // })
-  // provider := redis.New(redis.Config{
+  // provider, err := redis.New(redis.Config{
   //   KeyPrefix:   "session",
   //   Addr:        "127.0.0.1:6379",
   //   PoolSize:    8,
   //   IdleTimeout: 30 * time.Second,
   // })
-  // provider := sqlite3.New(sqlite3.Config{
+  // provider, err := sqlite3.New(sqlite3.Config{
   //   DBPath:     "test.db",
   //   TableName:  "session",
   // })
+
+  if err != nil {
+    log.Fatal(err.Error()) 
+  }
 
   sessions := session.New(session.Config{
     Provider: provider,

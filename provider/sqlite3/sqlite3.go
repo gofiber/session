@@ -8,21 +8,21 @@ package sqlite3
 import (
 	"time"
 
-	sqlite3 "github.com/fasthttp/session/v2/providers/sqlite3"
-	utils "github.com/gofiber/session/provider"
+	"github.com/fasthttp/session/v2/providers/sqlite3"
 )
 
 // Config redis options
 type Config struct {
 	DBPath          string
 	TableName       string
+	DropTable       bool
 	MaxIdleConns    int
 	MaxOpenConns    int
 	ConnMaxLifetime time.Duration
 }
 
 // New ...
-func New(config ...Config) *sqlite3.Provider {
+func New(config ...Config) (*sqlite3.Provider, error) {
 	var cfg Config
 	if len(config) > 0 {
 		cfg = config[0]
@@ -45,12 +45,14 @@ func New(config ...Config) *sqlite3.Provider {
 	provider, err := sqlite3.New(sqlite3.Config{
 		DBPath:          cfg.DBPath,
 		TableName:       cfg.TableName,
+		DropTable:       cfg.DropTable,
 		MaxIdleConns:    cfg.MaxIdleConns,
 		MaxOpenConns:    cfg.MaxOpenConns,
 		ConnMaxLifetime: cfg.ConnMaxLifetime,
 	})
+
 	if err != nil {
-		utils.ErrorProvider("sqlite3", err)
+		return nil, err
 	}
-	return provider
+	return provider, err
 }

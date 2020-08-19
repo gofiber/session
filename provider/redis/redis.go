@@ -7,10 +7,10 @@ package redis
 
 import (
 	"crypto/tls"
+	goredis "github.com/go-redis/redis/v8"
 	"time"
 
 	"github.com/fasthttp/session/v2/providers/redis"
-	utils "github.com/gofiber/session/provider"
 )
 
 // Config Redis options
@@ -33,11 +33,11 @@ type Config struct {
 	IdleTimeout        time.Duration
 	IdleCheckFrequency time.Duration
 	TLSConfig          *tls.Config
-	// Limiter            redis.Limiter
+	Limiter            goredis.Limiter
 }
 
 // New ...
-func New(config ...Config) *redis.Provider {
+func New(config ...Config) (*redis.Provider, error) {
 	var cfg Config
 	if len(config) > 0 {
 		cfg = config[0]
@@ -46,7 +46,7 @@ func New(config ...Config) *redis.Provider {
 		cfg.KeyPrefix = "session"
 	}
 	if cfg.Addr == "" {
-		cfg.Addr = "127.0.0.1:6379"
+		cfg.Addr = "localhost:6379"
 	}
 	if cfg.PoolSize == 0 {
 		cfg.PoolSize = 8
@@ -74,10 +74,11 @@ func New(config ...Config) *redis.Provider {
 		IdleTimeout:        cfg.IdleTimeout,
 		IdleCheckFrequency: cfg.IdleCheckFrequency,
 		TLSConfig:          cfg.TLSConfig,
-		// Limiter             cfg.Limiter,
+		Limiter:            cfg.Limiter,
 	})
+
 	if err != nil {
-		utils.ErrorProvider("redis", err)
+		return nil, err
 	}
-	return provider
+	return provider, nil
 }
