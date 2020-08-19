@@ -8,8 +8,7 @@ package mysql
 import (
 	"time"
 
-	mysql "github.com/fasthttp/session/v2/providers/mysql"
-	utils "github.com/gofiber/session/provider"
+	"github.com/fasthttp/session/v2/providers/mysql"
 )
 
 // Config MySQL options
@@ -20,6 +19,7 @@ type Config struct {
 	Password  string
 	Database  string
 	TableName string
+	DropTable bool
 
 	Charset         string
 	Collation       string
@@ -32,7 +32,7 @@ type Config struct {
 }
 
 // New ...
-func New(config ...Config) *mysql.Provider {
+func New(config ...Config) (*mysql.Provider, error) {
 	var cfg Config
 	if len(config) > 0 {
 		cfg = config[0]
@@ -84,6 +84,7 @@ func New(config ...Config) *mysql.Provider {
 		Password:        cfg.Password,
 		Database:        cfg.Database,
 		TableName:       cfg.TableName,
+		DropTable:       cfg.DropTable,
 		Charset:         cfg.Charset,
 		Collation:       cfg.Collation,
 		Timeout:         cfg.Timeout,
@@ -93,8 +94,9 @@ func New(config ...Config) *mysql.Provider {
 		MaxOpenConns:    cfg.MaxOpenConns,
 		ConnMaxLifetime: cfg.ConnMaxLifetime,
 	})
+
 	if err != nil {
-		utils.ErrorProvider("mysql", err)
+		return nil, err
 	}
-	return provider
+	return provider, nil
 }

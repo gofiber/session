@@ -9,7 +9,6 @@ import (
 	"time"
 
 	postgres "github.com/fasthttp/session/v2/providers/postgre"
-	utils "github.com/gofiber/session/provider"
 )
 
 // Config Postgres options
@@ -20,6 +19,7 @@ type Config struct {
 	Password        string
 	Database        string
 	TableName       string
+	DropTable       bool
 	Timeout         time.Duration
 	MaxIdleConns    int
 	MaxOpenConns    int
@@ -27,7 +27,7 @@ type Config struct {
 }
 
 // New ...
-func New(config ...Config) *postgres.Provider {
+func New(config ...Config) (*postgres.Provider, error) {
 	var cfg Config
 	if len(config) > 0 {
 		cfg = config[0]
@@ -66,13 +66,15 @@ func New(config ...Config) *postgres.Provider {
 		Password:        cfg.Password,
 		Database:        cfg.Database,
 		TableName:       cfg.TableName,
+		DropTable:       cfg.DropTable,
 		Timeout:         cfg.Timeout,
 		MaxIdleConns:    cfg.MaxIdleConns,
 		MaxOpenConns:    cfg.MaxOpenConns,
 		ConnMaxLifetime: cfg.ConnMaxLifetime,
 	})
+
 	if err != nil {
-		utils.ErrorProvider("postgres", err)
+		return nil, err
 	}
-	return provider
+	return provider, nil
 }
