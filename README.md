@@ -48,7 +48,7 @@ func main() {
 	// create session handler, using the in-memory session store
 	sessions := session.New()
 
-	app.Get("/", func(c *fiber.Ctx) {
+	app.Get("/", func(c *fiber.Ctx) error {
 		store := sessions.Get(c) // get/create new session
 		defer store.Save()
 
@@ -58,6 +58,8 @@ func main() {
 		store.Regenerate()       // generate new session id
 		store.Delete("john")     // delete from storage
 		store.Set("john", "doe") // save to storage
+
+		return nil
 	})
 
 	log.Fatal(app.Listen(":3000"))
