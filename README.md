@@ -36,32 +36,33 @@ session.New(config ...session.Config) *Session
 package main
 
 import (
-  "fmt"
+	"log"
 
-  "github.com/gofiber/fiber/v2"
-  "github.com/gofiber/session/v2"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/session/v2"
 )
 
 func main() {
-  app := fiber.New()
+	app := fiber.New()
 
-  // create session handler, using the in-memory session store
-  sessions := session.New()
+	// create session handler, using the in-memory session store
+	sessions := session.New()
 
-  app.Get("/", func(c *fiber.Ctx) {
-    store := sessions.Get(c)    // get/create new session
-    defer store.Save()
+	app.Get("/", func(c *fiber.Ctx) {
+		store := sessions.Get(c) // get/create new session
+		defer store.Save()
 
-    store.ID()                   // returns session id
-    store.Destroy()              // delete storage + cookie
-    store.Get("john")            // get from storage
-    store.Regenerate()           // generate new session id
-    store.Delete("john")         // delete from storage
-    store.Set("john", "doe")     // save to storage
-  })
-  
-  app.Listen(3000)
+		store.ID()               // returns session id
+		store.Destroy()          // delete storage + cookie
+		store.Get("john")        // get from storage
+		store.Regenerate()       // generate new session id
+		store.Delete("john")     // delete from storage
+		store.Set("john", "doe") // save to storage
+	})
+
+	log.Fatal(app.Listen(":3000"))
 }
+
 ```
 
 ### Provider Example
@@ -69,73 +70,77 @@ func main() {
 package main
 
 import (
-  "github.com/gofiber/fiber/v2"
-  "github.com/gofiber/session/v2"
-  "github.com/gofiber/session/v2/provider/memcache"
-  "log"
-  // "github.com/gofiber/session/provider/mysql"
-  // "github.com/gofiber/session/provider/postgres"
-  // "github.com/gofiber/session/provider/redis"
-  // "github.com/gofiber/session/provider/sqlite3"
+	"log"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/session/v2"
+	"github.com/gofiber/session/v2/provider/memcache"
+	// "github.com/gofiber/session/v2/provider/mysql"
+	// "github.com/gofiber/session/v2/provider/postgres"
+	// "github.com/gofiber/session/v2/provider/redis"
+	// "github.com/gofiber/session/v2/provider/sqlite3"
 )
 
 func main() {
-  app := fiber.New()
+	app := fiber.New()
 
-  provider, err := memcache.New(memcache.Config{
-    KeyPrefix:  "session",
-    ServerList: []string{
-      "0.0.0.0:11211",
-    },
-    MaxIdleConns: 8,
-  })
-  // provider, err := mysql.New(mysql.Config{
-  //   Host:       "session",
-  //   Port:       3306,
-  //   Username:   "root",
-  //   Password:   "",
-  //   Database:   "test",
-  //   TableName:  "session",
-  // })
-  // provider, err := postgres.New(postgres.Config{
-  //   Host:       "session",
-  //   Port:       5432,
-  //   Username:   "root",
-  //   Password:   "",
-  //   Database:   "test",
-  //   TableName:  "session",
-  // })
-  // provider, err := redis.New(redis.Config{
-  //   KeyPrefix:   "session",
-  //   Addr:        "127.0.0.1:6379",
-  //   PoolSize:    8,
-  //   IdleTimeout: 30 * time.Second,
-  // })
-  // provider, err := sqlite3.New(sqlite3.Config{
-  //   DBPath:     "test.db",
-  //   TableName:  "session",
-  // })
+	provider, err := memcache.New(memcache.Config{
+		KeyPrefix: "session",
+		ServerList: []string{
+			"0.0.0.0:11211",
+		},
+		MaxIdleConns: 8,
+	})
+	// provider, err := mysql.New(mysql.Config{
+	//   Host:       "session",
+	//   Port:       3306,
+	//   Username:   "root",
+	//   Password:   "",
+	//   Database:   "test",
+	//   TableName:  "session",
+	// })
+	// provider, err := postgres.New(postgres.Config{
+	//   Host:       "session",
+	//   Port:       5432,
+	//   Username:   "root",
+	//   Password:   "",
+	//   Database:   "test",
+	//   TableName:  "session",
+	// })
+	// provider, err := redis.New(redis.Config{
+	//   KeyPrefix:   "session",
+	//   Addr:        "127.0.0.1:6379",
+	//   PoolSize:    8,
+	//   IdleTimeout: 30 * time.Second,
+	// })
+	// provider, err := sqlite3.New(sqlite3.Config{
+	//   DBPath:     "test.db",
+	//   TableName:  "session",
+	// })
 
-  if err != nil {
-    log.Fatal(err.Error()) 
-  }
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 
-  sessions := session.New(session.Config{
-    Provider: provider,
-  })
+	sessions := session.New(session.Config{
+		Provider: provider,
+	})
 
-  app.Get("/", func(c *fiber.Ctx) {
-    store := sessions.Get(c)    // get/create new session
-    defer store.Save()
+	app.Get("/", func(c *fiber.Ctx) error {
+		store := sessions.Get(c) // get/create new session
+		defer store.Save()
 
-    store.ID()                   // returns session id
-    store.Destroy()              // delete storage + cookie
-    store.Get("john")            // get from storage
-    store.Regenerate()           // generate new session id
-    store.Delete("john")         // delete from storage
-    store.Set("john", "doe")     // save to storage
-  })
-  
-  app.Listen(3000)
+		store.ID()               // returns session id
+		store.Destroy()          // delete storage + cookie
+		store.Get("john")        // get from storage
+		store.Regenerate()       // generate new session id
+		store.Delete("john")     // delete from storage
+		store.Set("john", "doe") // save to storage
+
+		return nil
+	})
+
+	log.Fatal(app.Listen(":3000"))
 }
+
 ```
