@@ -11,8 +11,8 @@ Special thanks to [@thomasvvugt](https://github.com/thomasvvugt) for helping wit
 
 ### Install
 ```
-go get -u github.com/gofiber/fiber
-go get -u github.com/gofiber/session
+go get -u github.com/gofiber/fiber/v2
+go get -u github.com/gofiber/session/v2
 ```
 
 ### Signature
@@ -38,8 +38,8 @@ package main
 import (
   "fmt"
 
-  "github.com/gofiber/fiber"
-  "github.com/gofiber/session"
+  "github.com/gofiber/fiber/v2"
+  "github.com/gofiber/session/v2"
 )
 
 func main() {
@@ -69,9 +69,9 @@ func main() {
 package main
 
 import (
-  "github.com/gofiber/fiber"
-  "github.com/gofiber/session"
-  "github.com/gofiber/session/provider/memcache"
+  "github.com/gofiber/fiber/v2"
+  "github.com/gofiber/session/v2"
+  "github.com/gofiber/session/v2/provider/memcache"
   "log"
   // "github.com/gofiber/session/provider/mysql"
   // "github.com/gofiber/session/provider/postgres"

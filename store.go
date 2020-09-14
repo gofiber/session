@@ -7,7 +7,7 @@ package session
 
 import (
 	fsession "github.com/fasthttp/session/v2"
-	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/v2"
 )
 
 // Store is a wrapper arround the session.Store
@@ -24,11 +24,11 @@ func (s *Store) ID() string {
 
 // Save storage before response
 func (s *Store) Save() error {
-	if err := s.sess.core.Save(s.ctx.Fasthttp, s.core); err != nil {
+	if err := s.sess.core.Save(s.ctx.Context(), s.core); err != nil {
 		return err
 	}
 	if s.sess.config.noCookie {
-		s.ctx.Fasthttp.Response.Header.Del("Set-Cookie")
+		s.ctx.Response().Header.Del("Set-Cookie")
 	}
 	return nil
 }
@@ -56,5 +56,5 @@ func (s *Store) Destroy() {
 // Regenerate session id
 func (s *Store) Regenerate() error {
 	// https://github.com/fasthttp/session/blob/master/session.go#L205
-	return s.sess.core.Regenerate(s.ctx.Fasthttp)
+	return s.sess.core.Regenerate(s.ctx.Context())
 }
