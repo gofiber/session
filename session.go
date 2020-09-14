@@ -15,8 +15,8 @@ import (
 
 	fsession "github.com/fasthttp/session/v2"
 	"github.com/fasthttp/session/v2/providers/memory"
-	"github.com/gofiber/fiber"
-	"github.com/gofiber/utils"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/utils"
 	"github.com/valyala/fasthttp"
 )
 
@@ -154,7 +154,7 @@ func New(config ...Config) *Session {
 
 // Get store
 func (s *Session) Get(ctx *fiber.Ctx) *Store {
-	fstore, _ := s.core.Get(ctx.Fasthttp)
+	fstore, _ := s.core.Get(ctx.Context())
 	return &Store{
 		ctx:  ctx,
 		sess: s,
