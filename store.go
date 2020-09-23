@@ -49,8 +49,8 @@ func (s *Store) Delete(key string) {
 }
 
 // Destroy session and cookies
-func (s *Store) Destroy() {
-	s.core.Reset()
+func (s *Store) Destroy() error {
+	return s.sess.core.Destroy(s.ctx.Context())
 }
 
 // Regenerate session id
